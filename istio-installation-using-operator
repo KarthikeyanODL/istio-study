@@ -79,11 +79,13 @@ spec:
 kubectl apply -f iop-egress.yaml.
 
 
+Verify Installtion
+==================
 
-Updating and uninstalling Istio
+istioctl verify-install -f operator.yaml 
 
-kubectl delete istiooperator -n istio-system demo-istio-install
-istioctl operator remove
+
+
       
      
 
