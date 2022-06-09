@@ -1,0 +1,12 @@
+istioctl x uninstall --purge
+kubectl delete namespace istio-system
+
+
+
+===
+
+
+kubectl delete istiooperator -n istio-system demo-istio-install
+istioctl operator remove
+
+===
