@@ -47,3 +47,45 @@ $ kubectl get iop -A
 NAMESPACE      NAME                   REVISION   STATUS        AGE
 istio-system   demo-installation                 HEALTHY       67s
 The operator has finished installing Istio when all Pods are running, and the operator status is HEALTHY.
+
+
+
+Enable sidecar injection
+
+kubectl label namespace default istio-injection=enabled
+kubectl get namespace -L istio-injection
+
+$ kubectl create deploy my-nginx --image=nginx
+deployment.apps/my-nginx created
+If we look at the Pods, you will notice there are two containers in the Pod:
+
+$ kubectl get po
+NAME                        READY   STATUS    RESTARTS   AGE
+my-nginx-6b74b79f57-hmvj8   2/2     Running   0          62s
+
+
+Updating Operator
+================
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: demo-installation
+spec:
+  profile: demo
+  components:
+    egressGateways:
+    - name: istio-egressgateway
+      enabled: fals
+   
+kubectl apply -f iop-egress.yaml.
+
+
+
+Updating and uninstalling Istio
+
+kubectl delete istiooperator -n istio-system demo-istio-install
+istioctl operator remove
+      
+     
+
