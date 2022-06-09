@@ -1,0 +1,49 @@
+Download istioctl
+$ curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.10.3 sh -
+
+$ cd istio-1.10.3
+$ export PATH=$PWD/bin:$PATH
+
+$ istioctl version
+no running Istio pods in "istio-system"
+1.10.3
+
+$ istioctl profile list
+Istio configuration profiles:
+    default
+    demo
+    empty
+    external
+    minimal
+    openshift
+    preview
+    remote
+    
+    
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: demo-istio-install
+spec:
+  profile: demo
+The last thing we need to do is to create the resources:
+
+$ kubectl apply -f demo-profile.yaml  
+namespace/istio-system created
+istiooperator.install.istio.io/demo-istio-install created
+As soon as the operator detects the IstioOperator resource, it will start installing Istio. The whole process can take around 5 minutes.
+
+To check the status of the installation, we can look at the status of the Pods in the istio-system namespace:
+
+$ kubectl get po -n istio-system
+NAME                                    READY   STATUS    RESTARTS   AGE
+istio-egressgateway-6db9994577-sn95p    1/1     Running   0          79s
+istio-ingressgateway-58649bfdf4-cs4fk   1/1     Running   0          79s
+istiod-dd4b7db5-nxrjv                   1/1     Running   0          111s
+Or we can check the status of the installation by listing the Istio operator resource. The installation completes once the STATUS column shows HEALTHY:
+
+$ kubectl get iop -A
+NAMESPACE      NAME                   REVISION   STATUS        AGE
+istio-system   demo-installation                 HEALTHY       67s
+The operator has finished installing Istio when all Pods are running, and the operator status is HEALTHY.
