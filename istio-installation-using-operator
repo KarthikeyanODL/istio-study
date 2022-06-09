@@ -29,12 +29,10 @@ spec:
   profile: demo
 The last thing we need to do is to create the resources:
 
-$ kubectl apply -f demo-profile.yaml  
-namespace/istio-system created
-istiooperator.install.istio.io/demo-istio-install created
-As soon as the operator detects the IstioOperator resource, it will start installing Istio. The whole process can take around 5 minutes.
 
-To check the status of the installation, we can look at the status of the Pods in the istio-system namespace:
+$istioctl install -f operator.yaml 
+
+
 
 $ kubectl get po -n istio-system
 NAME                                    READY   STATUS    RESTARTS   AGE
